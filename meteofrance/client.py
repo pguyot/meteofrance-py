@@ -223,16 +223,21 @@ class meteofranceClient():
 
                 self._data["forecast"] = {}
                 daydatas = soup.find(class_="liste-jours").find_all("li")
-                for day in range(0, 5):
+                day = 0
+                for daydata in daydatas:
                     try:
-                        daydata = daydatas[day+1]
                         forecast = {}
                         forecast["date"] = daydata.find("a").string
                         forecast["weather"] = daydata.find("dd").string.strip()
-                        forecast["min_temp"] = int(re.sub(r"[^0-9\-]","",daydata.find(class_="min-temp").string))
-                        forecast["max_temp"] = int(re.sub(r"[^0-9\-]","",daydata.find(class_="max-temp").string))
+                        min_temp = re.sub(r"[^0-9\-]","",daydata.find(class_="min-temp").string)
+                        if min_temp != '-':
+                          forecast["min_temp"] = int(min_temp)
+                        max_temp = re.sub(r"[^0-9\-]","",daydata.find(class_="max-temp").string)
+                        if max_temp != '-':
+                          forecast["max_temp"] = int(max_temp)
                         forecast["weather_class"] = daydata.find("dd").attrs['class'][1]
                         self._data["forecast"][day] = forecast
+                        day = day + 1
                     except:
                         raise
 

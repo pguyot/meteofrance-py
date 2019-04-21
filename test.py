@@ -61,6 +61,7 @@ class TestClientData(unittest.TestCase):
     self.assertNotIn('next_rain', data)
     self.assertNotIn('rain_forecast_text', data)
     self.assertNotIn('rain_forecast', data)
+    self.assertEqual(len(data['forecast']), 14)
 
   # pointe-a-pitre : result from meteo-france is different and it returns less data
   def test_pointe_a_pitre(self):
@@ -86,6 +87,33 @@ class TestClientData(unittest.TestCase):
     self.assertNotIn('next_rain', data)
     self.assertNotIn('rain_forecast_text', data)
     self.assertNotIn('rain_forecast', data)
+    self.assertEqual(len(data['forecast']), 10)
+
+  # Same with world data
+  def test_pointe_a_pitre(self):
+    client = meteofranceClient('Tokyo')
+    client.need_rain_forecast = False
+    client.update()
+    data = client.get_data()
+    self.assertIn('name', data)
+    self.assertNotIn('dept', data)
+    self.assertIn('fetched_at', data)
+    self.assertIn('forecast', data)
+    self.assertNotIn('freeze_chance', data)
+    self.assertNotIn('rain_chance', data)
+    self.assertNotIn('snow_chance', data)
+    self.assertIn('temperature', data)
+    self.assertNotIn('thunder_chance', data)
+    self.assertNotIn('uv', data)
+    self.assertIn('weather_class', data)
+    self.assertIn('weather', data)
+    self.assertIn('wind_bearing', data)
+    self.assertIn('wind_speed', data)
+    self.assertNotIn('next_rain_intervals', data)
+    self.assertNotIn('next_rain', data)
+    self.assertNotIn('rain_forecast_text', data)
+    self.assertNotIn('rain_forecast', data)
+    self.assertEqual(len(data['forecast']), 10)
 
 class TestRainForecast(unittest.TestCase):
   def test_rain_forecast_is_updated(self):

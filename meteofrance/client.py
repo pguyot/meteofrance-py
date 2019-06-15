@@ -188,15 +188,17 @@ class meteofranceClient():
                     try:
                         forecast = {}
                         forecast["date"] = daydata.find("a").string
-                        forecast["weather"] = daydata.find("dd").string.strip()
-                        min_temp = re.sub("[^0-9\-]","",daydata.find(class_="min-temp").string)
-                        if min_temp != '-':
-                          forecast["min_temp"] = int(min_temp)
-                        max_temp = re.sub("[^0-9\-]","",daydata.find(class_="max-temp").string)
-                        if max_temp != '-':
-                          forecast["max_temp"] = int(max_temp)
-                        forecast["weather_class"] = daydata.find("dd").attrs['class'][1]
-                        self._data["forecast"][day] = forecast
+                        weather = daydata.find("dd").string
+                        if weather:
+                          forecast["weather"] = weather.strip()
+                          min_temp = re.sub("[^0-9\-]","",daydata.find(class_="min-temp").string)
+                          if min_temp != '-':
+                            forecast["min_temp"] = int(min_temp)
+                          max_temp = re.sub("[^0-9\-]","",daydata.find(class_="max-temp").string)
+                          if max_temp != '-':
+                            forecast["max_temp"] = int(max_temp)
+                          forecast["weather_class"] = daydata.find("dd").attrs['class'][1]
+                          self._data["forecast"][day] = forecast
                         day = day + 1
                     except:
                         raise

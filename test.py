@@ -94,7 +94,7 @@ class TestClientData(unittest.TestCase):
     self.assertNotIn('next_rain_datetime', data)
     self.assertNotIn('rain_forecast_text', data)
     self.assertNotIn('rain_forecast', data)
-    self.assertEqual(len(data['forecast']), 10)
+    self.assertGreaterEqual(len(data['forecast']), 9)
 
   # Same with world data
   def test_pointe_a_pitre(self):
@@ -120,7 +120,7 @@ class TestClientData(unittest.TestCase):
     self.assertNotIn('next_rain', data)
     self.assertNotIn('rain_forecast_text', data)
     self.assertNotIn('rain_forecast', data)
-    self.assertEqual(len(data['forecast']), 10)
+    self.assertGreaterEqual(len(data['forecast']), 9)
 
 class TestRainForecast(unittest.TestCase):
   def test_rain_forecast_is_updated(self):

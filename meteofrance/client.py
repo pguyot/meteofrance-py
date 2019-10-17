@@ -24,7 +24,7 @@ class meteofranceError(Exception):
 
 class meteofranceClient():
     """Client to fetch and parse data from Meteo-France"""
-    def __init__(self, postal_code, update=False, need_rain_forecast=True):
+    def __init__(self, postal_code, update=False, need_rain_forecast=True, include_today=False):
         """Initialize the client object."""
         self.postal_code = postal_code
         self._city_slug = False
@@ -33,6 +33,7 @@ class meteofranceClient():
         self._rain_available = False
         self._weather_html_soup = False
         self.need_rain_forecast = need_rain_forecast
+        self.include_today = include_today
         self._type = None
         self._data = {}
         self._init_codes()
@@ -238,7 +239,10 @@ class meteofranceClient():
                           if max_temp != '-':
                             forecast["max_temp"] = int(max_temp)
                           forecast["weather_class"] = daydata.find("dd").attrs['class'][1]
-                          self._data["forecast"][day] = forecast
+                          if self.include_today:
+                            self._data["forecast"][day] = forecast
+                          elif day > 0 and day < 6:
+                            self._data["forecast"][day-1] = forecast
                         day = day + 1
                     except:
                         raise
